@@ -27,7 +27,7 @@ void print_eth_header(ethernet_header_t *eth_header){
 	printf("[+]==========================================[+]\n");
 }
 void print_ipv4_header(ipv4_header_t *ipv4_header){
-	uint8_t * src, dest;
+	uint8_t[] * src, dest;
 	
 	src = &ipv4_header->src_ip;
 	dest = &ipv4_header->dest_ip;
