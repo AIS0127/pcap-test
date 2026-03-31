@@ -24,10 +24,23 @@ void print_eth_header(ethernet_header_t *eth_header){
 	printf("[+]============ Ethernet Header =============[+]\n");
 	printf("[Src] : %02X:%02X:%02X:%02X:%02X:%02X\n",eth_header->src_mac[0],eth_header->src_mac[1],eth_header->src_mac[2],eth_header->src_mac[3],eth_header->src_mac[4],eth_header->src_mac[5]);
 	printf("[Dest] : %02X:%02X:%02X:%02X:%02X:%02X\n",eth_header->dest_mac[0],eth_header->dest_mac[1],eth_header->dest_mac[2],eth_header->dest_mac[3],eth_header->dest_mac[4],eth_header->dest_mac[5]);
+	printf("[+]==========================================[+]\n");
+}
+void print_ipv4_header(ipv4_header_t *ipv4_header){
+	uint8_t * src, dest;
+	
+	src = &ipv4_header->src_ip;
+	dest = &ipv4_header->dest_ip;
+
+	printf("[+]============== IPV4 Header ===============[+]\n");
+	printf("[Src] : %u.%u.%u.%u\n",src[0],src[1],src[2],src[3]);
+	printf("[Dest] : %u.%u.%u.%u\n",dest[0],dest[1],dest[2],dest[3]);
+	printf("[+]==========================================[+]\n");
 }
 
 void print_each_header_v4(const u_char * packet){
 	print_eth_header((ethernet_header_t*)packet);
+	print_ipv4_header(&packet[sizeof(ethernet_header_t)]);
 }
 
 void print_each_header_v6(const u_char * packet){
