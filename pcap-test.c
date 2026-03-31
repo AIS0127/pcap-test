@@ -13,10 +13,8 @@ int is_eligible(const u_char * packet){
 
 	uint16_t ip_version = ntohs(eth_header->ethertype);
 	if(ip_version == IPV4){
-		return ((ipv4_header_t *)(&packet[sizeof(ethernet_header_t)]))->protocol == TCP ? 4 : 0;
-	}else if(ip_version == IPV6){
-		return ((ipv6_header_t *)(&packet[sizeof(ethernet_header_t)]))->next_header == TCP ? 6 : 0;
-	}else{
+		return ((ipv4_header_t *)(&packet[sizeof(ethernet_header_t)]))->protocol == TCP;
+	} else{
 		return 0;
 	}
 }
@@ -38,13 +36,12 @@ void print_ipv4_header(ipv4_header_t *ipv4_header){
 	printf("[+]==========================================[+]\n");
 }
 
-void print_each_header_v4(const u_char * packet){
-	print_eth_header((ethernet_header_t*)packet);
-	print_ipv4_header((ipv4_header_t*)&packet[sizeof(ethernet_header_t)]);
-}
 
-void print_each_header_v6(const u_char * packet){
+void print_each_header(const u_char * packet){
 	print_eth_header((ethernet_header_t*)packet);
+	printf("\n");
+	print_ipv4_header((ipv4_header_t*)&packet[sizeof(ethernet_header_t)]);
+	printf("\n");
 }
 
 
@@ -84,16 +81,8 @@ int main(int argc, char* argv[]) {
 		if (res == PCAP_ERROR || res == PCAP_ERROR_BREAK) {
 			printf("pcap_next_ex return %d(%s)\n", res, pcap_geterr(pcap));
 			break;
-		}
-		switch(is_eligible(packet)){
-			case 4:
-				print_each_header_v4(packet);	
-				break;
-			case 6:
-				print_each_header_v6(packet);	
-				break;
-			default:
-				break;
+		}else if(is_eligible(packet)){
+				print_each_header(packet);	
 		}
 		
 	}
