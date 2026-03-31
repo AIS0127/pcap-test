@@ -21,9 +21,9 @@ int is_eligible(const u_char * packet){
 	}
 }
 void print_eth_header(ethernet_header_t *eth_header){
-	printf("[+]============ Ethernet Header =============[+]");
-	printf("[Src] : %02X:%02X:%02X:%02X:%02X:%02X",eth_header->src_mac[0],eth_header->src_mac[1],eth_header->src_mac[2],eth_header->src_mac[3],eth_header->src_mac[4],eth_header->src_mac[5]);
-	printf("[Dest] : %02X:%02X:%02X:%02X:%02X:%02X",eth_header->dest_mac[0],eth_header->dest_mac[1],eth_header->dest_mac[2],eth_header->dest_mac[3],eth_header->dest_mac[4],eth_header->dest_mac[5]);
+	printf("[+]============ Ethernet Header =============[+]\n");
+	printf("[Src] : %02X:%02X:%02X:%02X:%02X:%02X\n",eth_header->src_mac[0],eth_header->src_mac[1],eth_header->src_mac[2],eth_header->src_mac[3],eth_header->src_mac[4],eth_header->src_mac[5]);
+	printf("[Dest] : %02X:%02X:%02X:%02X:%02X:%02X\n",eth_header->dest_mac[0],eth_header->dest_mac[1],eth_header->dest_mac[2],eth_header->dest_mac[3],eth_header->dest_mac[4],eth_header->dest_mac[5]);
 }
 
 void print_each_header_v4(const u_char * packet){
