@@ -13,13 +13,27 @@ int is_eligible(const u_char * packet){
 
 	uint16_t ip_version = ntohs(eth_header->ethertype);
 	if(ip_version == IPV4){
-		return ((ipv4_header_t *)(&packet[sizeof(ethernet_header_t)]))->protocol == TCP;
+		return ((ipv4_header_t *)(&packet[sizeof(ethernet_header_t)]))->protocol == TCP ? 4 : 0;
 	}else if(ip_version == IPV6){
-		return ((ipv6_header_t *)(&packet[sizeof(ethernet_header_t)]))->next_header == TCP;
+		return ((ipv6_header_t *)(&packet[sizeof(ethernet_header_t)]))->next_header == TCP ? 6 : 0;
 	}else{
-		return -1;
+		return 0;
 	}
 }
+void print_eth_header(ethernet_header_t *eth_header){
+	printf("[+]============ Ethernet Header =============[+]");
+	printf("[Src] : %02X:%02X:%02X:%02X:%02X:%02X",eth_header->src_mac[0],eth_header->src_mac[1],eth_header->src_mac[2],eth_header->src_mac[3],eth_header->src_mac[4],eth_header->src_mac[5]);
+	printf("[Dest] : %02X:%02X:%02X:%02X:%02X:%02X",eth_header->dest_mac[0],eth_header->dest_mac[1],eth_header->dest_mac[2],eth_header->dest_mac[3],eth_header->dest_mac[4],eth_header->dest_mac[5]);
+}
+
+void print_each_header_v4(const u_char * packet){
+	print_eth_header((ethernet_header_t*)packet);
+}
+
+void print_each_header_v6(const u_char * packet){
+	print_eth_header((ethernet_header_t*)packet);
+}
+
 
 typedef struct {
 	char* dev_;
@@ -57,8 +71,16 @@ int main(int argc, char* argv[]) {
 		if (res == PCAP_ERROR || res == PCAP_ERROR_BREAK) {
 			printf("pcap_next_ex return %d(%s)\n", res, pcap_geterr(pcap));
 			break;
-		}else if(is_eligible(packet)){
-			printf("it's TCP !\n");
+		}
+		switch(is_eligible(packet)){
+			case 4:
+				print_each_header_v4(packet);	
+				break;
+			case 6:
+				print_each_header_v6(packet);	
+				break;
+			default:
+				break;
 		}
 		
 	}
