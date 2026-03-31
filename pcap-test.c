@@ -30,7 +30,7 @@ void print_ipv4_header(ipv4_header_t *ipv4_header){
 	uint8_t[] * src, dest;
 	
 	src = &ipv4_header->src_ip;
-	dest = &ipv4_header->dest_ip;
+	dest = &ipv4_header->dst_ip;
 
 	printf("[+]============== IPV4 Header ===============[+]\n");
 	printf("[Src] : %u.%u.%u.%u\n",src[0],src[1],src[2],src[3]);
