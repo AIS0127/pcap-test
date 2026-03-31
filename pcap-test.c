@@ -11,9 +11,10 @@ void usage() {
 int is_eligible(const u_char * packet){
 	ethernet_header_t *eth_header = (ethernet_header_t *)packet;
 
-	if(eth_header->ethertype == IPV4){
+	uint16_t ip_version = ntohs(eth_header->ethertype);
+	if(ip_version == IPV4){
 		return ((ipv4_header_t *)(&packet[sizeof(ethernet_header_t)]))->protocol == TCP;
-	}else if(eth_header->ethertype == IPV6){
+	}else if(ip_version == IPV6){
 		return ((ipv6_header_t *)(&packet[sizeof(ethernet_header_t)]))->next_header == TCP;
 	}else{
 		return -1;
