@@ -1,10 +1,23 @@
 #include <pcap.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "packet.h"
 
 void usage() {
 	printf("syntax: pcap-test <interface>\n");
 	printf("sample: pcap-test wlan0\n");
+}
+
+int is_eligible(const u_char * packet){
+	ethernet_header_t *eth_header = (ethernet_header_t *)packet;
+
+	if(eth_header->ethertype == IPV4){
+		return ((ipv4_header_t *)(&packet[sizeof(ethernet_header_t)]))->protocol == TCP;
+	}else if(eth_header->ethertype == IPV6){
+		return ((ipv6_header_t *)(&packet[sizeof(ethernet_header_t)]))->next_header == TCP;
+	}else{
+		return -1;
+	}
 }
 
 typedef struct {
@@ -43,8 +56,10 @@ int main(int argc, char* argv[]) {
 		if (res == PCAP_ERROR || res == PCAP_ERROR_BREAK) {
 			printf("pcap_next_ex return %d(%s)\n", res, pcap_geterr(pcap));
 			break;
+		}else if(is_eligible(packet)){
+			printf("it's TCP !\n");
 		}
-		printf("%u bytes captured\n", header->caplen);
+		
 	}
 
 	pcap_close(pcap);
