@@ -24,7 +24,7 @@ typedef struct __attribute__((packed)) ipv4_header_t {
     uint8_t protocol;
     uint16_t header_checksum;
     uint32_t src_ip;
-    uint32_t dst_ip;
+    uint32_t dest_ip;
 } ipv4_header_t;
 
 typedef struct __attribute__((packed)) ipv6_header_t {
@@ -33,13 +33,13 @@ typedef struct __attribute__((packed)) ipv6_header_t {
     uint8_t next_header;
     uint8_t hop_limit;
     uint8_t src_ip[16];
-    uint8_t dst_ip[16];
+    uint8_t dest_ip[16];
 } ipv6_header_t;
 
 
 typedef struct __attribute__((packed)) tcp_header_t {
-    uint16_t src_ip;
-    uint16_t dst_ip;
+    uint16_t src_port;
+    uint16_t dest_port;
     uint32_t seq_num;
     uint32_t ack_num;
     uint16_t offset_flags;
